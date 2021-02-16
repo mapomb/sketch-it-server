@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/97f6fd05-04c5-4ab1-9261-d3aec12076ec/resourceGroups/sketch-it-rg/providers/Microsoft.Web/sites/sketch-it",
+    "appService.deploySubpath": "."
+}
