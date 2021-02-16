@@ -32,5 +32,5 @@ jobs:
       with:
         app-name: 'sketch-it'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_f34dc2ba33a44cb18bd14a5e34ea1734 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_d178b6f108df40ecb682718ab3bc542d }}
         package: .
