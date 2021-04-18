@@ -2,8 +2,8 @@
   "name": "simple-node-server",
   "version": "1.0.0",
   "engines": {
-    "node": "12.x",
-  }
+    "node": "12.x"
+  },
   "description": "A simple Node.js server to run in Azure",
   "main": "server.js",
   "scripts": {
