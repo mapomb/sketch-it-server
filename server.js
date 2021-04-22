@@ -27,20 +27,14 @@ var cors = require('cors');
 var appPort = normalizePort(process.env.PORT || '3000');
 var baseDix = 10;
 const app = express();
-app.use(cors());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
 const mongoClient = require('mongodb').MongoClient;
 app.set('port', appPort);
 const server = http.createServer(app);
-io = require('socket.io').listen(server, {
-        cors: {
-            origin: "http://localhost:4200",
-            methods: ["GET", "POST"],
-            allowedHeathers: ["Access-Control-Allow-Origin"],
-            credentials: true,
-            transports: ['websocket'] //added
-        },
-        allowEIO3: true // added
-    });
+io = require('socket.io').listen(server);
 var collection = require('mongodb').Collection;
 const { resolve } = require("path");
 const { totalmem } = require("os");
