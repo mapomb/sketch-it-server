@@ -15,7 +15,7 @@ const settings = {
         tries: 1
     }
 }
-const words = ["maison", "voiture", "avion", "helicoptere"];
+var words = ["car"];
 "use strict";
 
 var http = require("http");
@@ -23,7 +23,7 @@ const request = require('request');
 
 const express = require('express');
 
-var appPort = normalizePort(process.env.PORT || '4000');
+var appPort = normalizePort(process.env.PORT || '3000');
 var baseDix = 10;
 const app = express();
 const mongoClient = require('mongodb').MongoClient;
@@ -67,7 +67,7 @@ function main() {
         var firstTime = true;
         var scoreTeamA = 0;
         var scoreTeamB = 0;
-        var firstTimeClassic;
+        var firstTimeClassic = true;
         var timeOutsClassic = [];
         socket.on('user-connect', function (data) {
             socket.username = data;
@@ -109,13 +109,19 @@ function main() {
 
         //DRAWING-SIDE----------------------------------------OWNER SPECIFIC-----------------------------------------------
         socket.on('game-start', async function (difficulty) {//STARTS GAME: OWNER SPECIFIC
-            request(`http://sketch-it-app.herokuapp.com/api/words/get/${difficulty}`, { json: true }, (err, res, body) => {
-                body.forEach(function (word) {
-                    words.push(word.word);
-                })
-            })
+            // request(`http://localhost:3050/api/words/get/${difficulty}`, { json: true }, (err, res, body) => {
+            //     word=body.word;
+            // })
             //TODO: Get le modele de la game
             //TODO: Get les teams[{username: "blabla"}]
+            request(`http://sketch-it-app.herokuapp.com/api/words/get/${difficulty}`, { json: true }, (err, res, body) => {
+                var temp = [];
+                body.forEach((word) => {
+                    temp.push(word.word);
+                })
+                words=temp;
+            })
+            await sleep(100);
             console.log('game is starting.......................................................................')
             socket.turn = 0;
             //GET HERE GAME INFO
@@ -162,7 +168,7 @@ function main() {
                 //Send word to draw to drawer;
                 console.log("drawer: " + socket.gameDrawer);
                 console.log("guesser: " + socket.gameGuesser);
-                let wordToDraw = words[Math.round(Math.random() * (words.length - 1))];
+                let wordToDraw = words[Math.round(Math.random()*(words.length-1))];
                 console.log(Math.random() * words.length);
                 console.log("To guess: " + wordToDraw);
                 socket.emit('wordToDraw', wordToDraw)
@@ -189,7 +195,7 @@ function main() {
                 io.to(socket.classicRoom).emit('game-end', winner)//get random word
                 return;
             } 
-            if(socket.gameDrawer != "virtualA" || socket.gameDrawer != "virtualB" ){
+            if(socket.gameDrawer != "virtualA" && socket.gameDrawer != "virtualB" ){
                 username = socket.gameDrawer
             }else if(socket.gameDrawer == "virtualA"){
                 username = socket.teamA[0]
@@ -234,7 +240,7 @@ function main() {
                         socket.gameGuesser = socket.teamB[0]
                         io.to(socket.classicRoom).emit('isGuessing', socket.gameGuesser);
                     }
-                    let wordToDraw = words[Math.floor(Math.random() * words.length)];
+                    let wordToDraw = words[Math.round(Math.random()*(words.length-1))];
                     // console.log(Math.random() * words.length);
                     console.log("To guess: " + wordToDraw);
                     socket.emit('wordToDraw', wordToDraw)
@@ -265,7 +271,7 @@ function main() {
                         socket.gameGuesser = socket.teamA[1]
                         io.to(socket.classicRoom).emit('isGuessing', socket.gameGuesser);
                     }
-                    let wordToDraw = words[Math.floor(Math.random() * words.length)];
+                    let wordToDraw = words[Math.round(Math.random()*(words.length-1))];
                     // console.log(Math.random() * words.length);
                     console.log("To guess: " + wordToDraw);
                     socket.emit('wordToDraw', wordToDraw)
@@ -321,7 +327,8 @@ function main() {
 
         socket.on('skip-word', function () {
             //socket.emit('wordToDraw', "chapeau")
-            io.to(socket.classicRoom).emit('wordToDraw', words[Math.round(Math.random() * (words.length-1))])//get random word
+            io.to(socket.classicRoom).emit('wordToDraw', words[Math.round(Math.random()*(words.length-1))]);
+            //get random word
 
             //io.to(socket.classicRoom).emit('wordToGuess', "chapeau")//get new word
         })
@@ -355,13 +362,7 @@ function main() {
             timeOutsClassic = [];
         })
         socket.on('virtual-classic-draw', function (difficulty) {
-            if (!firstTimeClassic) {
-                console.log('clearing draw...')
-                timeOutsClassic.forEach(function (timeOut) {
-                    clearTimeout(timeOut);
-                })
-                timeOutsClassic = [];
-            }
+            
             var difficulty = difficulty;
             console.log(difficulty);
 
@@ -440,7 +441,6 @@ function main() {
         //PMI-------------------------------PMI----------------------------------------
         socket.on('solo-right-guess', function () {
             firstTime = false
-
         })
         socket.on('stop-virtual', function () {
             timeOuts.forEach(function (timeOut) {
@@ -731,6 +731,10 @@ function normalizePort(val) {
         return false;
     }
 };
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function onError(error) {
     if (error.syscall !== 'listen') {
