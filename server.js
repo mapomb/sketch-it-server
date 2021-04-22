@@ -22,13 +22,16 @@ var http = require("http");
 const request = require('request');
 
 const express = require('express');
+var cors = require('cors');
 
 var appPort = normalizePort(process.env.PORT || '3000');
 var baseDix = 10;
 const app = express();
+app.use(cors());
 const mongoClient = require('mongodb').MongoClient;
 app.set('port', appPort);
 const server = http.createServer(app);
+io = require('socket.io').listen(server);
 var collection = require('mongodb').Collection;
 const { resolve } = require("path");
 const { totalmem } = require("os");
@@ -50,16 +53,16 @@ function main() {
     });
     // *** added for the new project
     
-    let io = require("socket.io")(server, {
-        cors: {
-            origin: "http://localhost:4200",
-            methods: ["GET", "POST"],
-            allowedHeathers: ["Access-Control-Allow-Origin"],
-            credentials: true,
-            transports: ['websocket'] //added
-        },
-        allowEIO3: true // added
-    });
+    // let io = require("socket.io")(server, {
+    //     cors: {
+    //         origin: "http://localhost:4200",
+    //         methods: ["GET", "POST"],
+    //         allowedHeathers: ["Access-Control-Allow-Origin"],
+    //         credentials: true,
+    //         transports: ['websocket'] //added
+    //     },
+    //     allowEIO3: true // added
+    // });
 
     io.on("connect", function (socket) {
         var timeOuts = [];
