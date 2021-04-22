@@ -31,7 +31,16 @@ app.use(cors());
 const mongoClient = require('mongodb').MongoClient;
 app.set('port', appPort);
 const server = http.createServer(app);
-io = require('socket.io').listen(server);
+io = require('socket.io').listen(server, {
+        cors: {
+            origin: "http://localhost:4200",
+            methods: ["GET", "POST"],
+            allowedHeathers: ["Access-Control-Allow-Origin"],
+            credentials: true,
+            transports: ['websocket'] //added
+        },
+        allowEIO3: true // added
+    });
 var collection = require('mongodb').Collection;
 const { resolve } = require("path");
 const { totalmem } = require("os");
@@ -63,6 +72,7 @@ function main() {
     //     },
     //     allowEIO3: true // added
     // });
+
 
     io.on("connect", function (socket) {
         var timeOuts = [];
