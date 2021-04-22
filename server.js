@@ -114,7 +114,7 @@ function main() {
             // })
             //TODO: Get le modele de la game
             //TODO: Get les teams[{username: "blabla"}]
-            request(`http://sketch-it-app.herokuapp.com/api/words/get/${difficulty}`, { json: true }, (err, res, body) => {
+            request(`http://localhost:3050/api/words/get/${difficulty}`, { json: true }, (err, res, body) => {
                 var temp = [];
                 body.forEach((word) => {
                     temp.push(word.word);
@@ -366,7 +366,7 @@ function main() {
             var difficulty = difficulty;
             console.log(difficulty);
 
-            request(`http://sketch-it-app.herokuapp.com/api/drawing/get/${difficulty}`, { json: true }, (err, res, body) => {
+            request(`http://localhost:3050/api/drawing/get/${difficulty}`, { json: true }, (err, res, body) => {
                 // console.log(body.title);
                 // console.log(body);
                 if (err) { return console.log(err); }
@@ -457,7 +457,7 @@ function main() {
             }
             console.log('ok');
             var difficulty = drawing;
-            request(`http://sketch-it-app.herokuapp.com/api/drawing/get/${difficulty}`, { json: true }, (err, res, body) => {
+            request(`http://localhost:3050/api/drawing/get/${difficulty}`, { json: true }, (err, res, body) => {
                 if (err) { return console.log(err); }
                 socket.emit('drawing-title', body.title);
                 socket.emit('drawing-hints', body.hints);
