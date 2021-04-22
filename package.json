@@ -22,6 +22,7 @@
   "homepage": "https://github.com/clarkio/simple-node-server#readme",
   "dependencies": {
     "applicationinsights": "^1.0.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongodb": "^3.6.4",
     "request": "^2.88.2",
