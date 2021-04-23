@@ -18,58 +18,16 @@ const settings = {
 var words = ["car"];
 "use strict";
 
-const express = require('express');
-const app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-io.set('origins', 'http://localhost:4200');
+var http = require("http");
 const request = require('request');
-const cors = require('cors');
-const whitelist = ['http://localhost:4200', 'http://sketch-it-app.herokuapp.com','http://sketch-it-sockets.herokuapp.com'];
-const corsOptions = {
-  credentials: true, // This is important.
-  origin: (origin, callback) => {
-    if(whitelist.includes(origin))
-      return callback(null, true)
-
-      callback(new Error('Not allowed by CORS'));
-  }
-}
-
-app.use(cors(corsOptions));
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT ,DELETE");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-});
-io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    console.log("connectd");
-});
-var server = app.listen(3000, function (io) {
-})
-
-//ANCIENT
-// var http = require("http");
-// const request = require('request');
-
-// const express = require('express');
-
-// var appPort = normalizePort(process.env.PORT || '3000');
-// var baseDix = 10;
-// const app = express();
-
+const express = require('express');
+var appPort = normalizePort(process.env.PORT || '3000');
+var baseDix = 10;
+const app = express();
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }))
 const mongoClient = require('mongodb').MongoClient;
-// app.set('port', appPort);
-// const server = http.createServer(app);
+app.set('port', appPort);
+const server = http.createServer(app);
 var collection = require('mongodb').Collection;
 const { resolve } = require("path");
 const { totalmem } = require("os");
