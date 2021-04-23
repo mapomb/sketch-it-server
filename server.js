@@ -56,16 +56,16 @@ function main() {
     });
     // *** added for the new project
     
-    let io = require("socket.io")(server, {
-        cors: {
-            origin: "*",
-            methods: ["GET", "POST"],
-            allowedHeathers: ["Access-Control-Allow-Origin"],
-            credentials: true,
-            transports: ['websocket'] //added
-        },
-        allowEIO3: true // added
-    });
+    // let io = require("socket.io")(server, {
+    //     cors: {
+    //         origin: "*",
+    //         methods: ["GET", "POST"],
+    //         allowedHeathers: ["Access-Control-Allow-Origin"],
+    //         credentials: true,
+    //         transports: ['websocket'] //added
+    //     },
+    //     allowEIO3: true // added
+    // });
 
 
     io.on("connect", function (socket) {
