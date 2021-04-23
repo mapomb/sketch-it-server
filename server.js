@@ -24,13 +24,13 @@ const express = require('express');
 var appPort = normalizePort(process.env.PORT || '3000');
 var baseDix = 10;
 const app = express();
-app.use(cors({
-    origin: function(origin, callback){
-      return callback(null, true);
-    },
-    optionsSuccessStatus: 200,
-    credentials: true
-  }));
+// app.use(cors({
+//     origin: function(origin, callback){
+//       return callback(null, true);
+//     },
+//     optionsSuccessStatus: 200,
+//     credentials: true
+//   }));
 // app.use(cors({ origin: 'http://localhost:4200/', credentials: true }))
 const mongoClient = require('mongodb').MongoClient;
 app.set('port', appPort);
@@ -56,16 +56,16 @@ function main() {
     });
     // *** added for the new project
     
-    // let io = require("socket.io")(server, {
-    //     cors: {
-    //         origin: "*",
-    //         methods: ["GET", "POST"],
-    //         allowedHeathers: ["Access-Control-Allow-Origin"],
-    //         credentials: true,
-    //         transports: ['websocket'] //added
-    //     },
-    //     allowEIO3: true // added
-    // });
+    let io = require("socket.io")(server, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"],
+            allowedHeathers: ["Access-Control-Allow-Origin"],
+            credentials: false,
+            transports: ['websocket'] //added
+        },
+        allowEIO3: true // added
+    });
 
 
     io.on("connect", function (socket) {
