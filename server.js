@@ -17,20 +17,15 @@ const settings = {
 }
 var words = ["car"];
 "use strict";
+
 var http = require("http");
 const request = require('request');
+
 const express = require('express');
+
 var appPort = normalizePort(process.env.PORT || '3000');
 var baseDix = 10;
 const app = express();
-// app.use(cors({
-//     origin: function(origin, callback){
-//       return callback(null, true);
-//     },
-//     optionsSuccessStatus: 200,
-//     credentials: true
-//   }));
-// app.use(cors({ origin: 'http://localhost:4200/', credentials: true }))
 const mongoClient = require('mongodb').MongoClient;
 app.set('port', appPort);
 const server = http.createServer(app);
@@ -57,9 +52,10 @@ function main() {
     
     let io = require("socket.io")(server, {
         cors: {
-            origin: "*",
+            origin: "http://localhost:4200",
             methods: ["GET", "POST"],
-            allowedHeaders: ["Access-Control-Allow-Origin"],
+            allowedHeathers: ["Access-Control-Allow-Origin"],
+            credentials: true,
             transports: ['websocket'] //added
         },
         allowEIO3: true // added
