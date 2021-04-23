@@ -24,19 +24,14 @@ const express = require('express');
 var appPort = normalizePort(process.env.PORT || '3000');
 var baseDix = 10;
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: function(origin, callback){
+      return callback(null, true);
+    },
+    optionsSuccessStatus: 200,
+    credentials: true
+  }));
 // app.use(cors({ origin: 'http://localhost:4200/', credentials: true }))
-app.all('*', function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-
-    if (req.method == 'OPTIONS') {
-        res.send(200);
-    } else {
-        next();
-    }
-});
 const mongoClient = require('mongodb').MongoClient;
 app.set('port', appPort);
 const server = http.createServer(app);
