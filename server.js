@@ -60,7 +60,7 @@ function main() {
         cors: {
             origin: "*",
             methods: ["GET", "POST"],
-            allowedHeathers: ["Access-Control-Allow-Origin"],
+            allowedHeaders: ["Access-Control-Allow-Origin"],
             credentials: false,
             transports: ['websocket'] //added
         },
