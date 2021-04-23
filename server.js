@@ -26,6 +26,18 @@ const express = require('express');
 var appPort = normalizePort(process.env.PORT || '3000');
 var baseDix = 10;
 const app = express();
+const cors = require('cors');
+const whitelist = ['http://localhost:4200', 'http://sketch-it-app.herokuapp.com', 'http://sketch-it-sockets.herokuapp.com'];
+const corsOptions = {
+  credentials: true, // This is important.
+  origin: (origin, callback) => {
+    if(whitelist.includes(origin))
+      return callback(null, true)
+
+      callback(new Error('Not allowed by CORS'));
+  }
+}
+app.use(cors(corsOptions));
 const mongoClient = require('mongodb').MongoClient;
 app.set('port', appPort);
 const server = http.createServer(app);
