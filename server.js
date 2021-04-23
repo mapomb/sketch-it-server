@@ -17,7 +17,7 @@ const settings = {
 }
 var words = ["car"];
 "use strict";
-
+var cors = require("cors")
 var http = require("http");
 const request = require('request');
 const express = require('express');
